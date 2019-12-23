@@ -4,25 +4,33 @@ import InsertPost from "./components/InsertPost";
 import Boarder from "./components/Boarder";
 import Menu from "./components/Menu";
 import Home from "./components/Home";
-import { BorderProvider } from "./contexts/Border";
 import ViewPost from "./components/ViewPost";
+import Join from "./components/Join";
+import UserList from "./components/UserList";
+
+import { UsersProvider } from "./contexts/Users";
+import { BorderProvider } from "./contexts/Border";
 
 function App() {
   return (
-    <BorderProvider>
-      <div>
+    <UsersProvider>
+      <BorderProvider>
         <div>
-          <Menu />
+          <div>
+            <Menu />
+          </div>
+          <div>
+            <Route path="/" component={Home} exact={true} />
+            <Route path="/Home" component={Home} exact={true} />
+            <Route path="/Boarder" component={Boarder} exact={true} />
+            <Route path="/InsertPost" component={InsertPost} />
+            <Route path="/ViewPost" component={ViewPost} />
+            <Route path="/Join" component={Join} />
+            <Route path="/UserList" component={UserList} />
+          </div>
         </div>
-        <div>
-          <Route path="/" component={Home} exact={true} />
-          <Route path="/Home" component={Home} exact={true} />
-          <Route path="/Boarder" component={Boarder} exact={true} />
-          <Route path="/InsertPost" component={InsertPost} />
-          <Route path="/ViewPost" component={ViewPost} />
-        </div>
-      </div>
-    </BorderProvider>
+      </BorderProvider>
+    </UsersProvider>
   );
 }
 

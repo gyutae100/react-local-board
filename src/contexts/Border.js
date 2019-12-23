@@ -9,7 +9,7 @@ const BorderContext = createContext({
 
 const BorderProvider = ({ children }) => {
   const [postList, setPostList] = useState([]);
-  const [currentIdx, setCurrentIdx] = useState([0]);
+  const [currentIdx, setCurrentIdx] = useState(0);
 
   const onHandleInsertPost = useCallback(
     (title, content) => {

@@ -44,6 +44,10 @@ const ViewPost = ({ location }) => {
             <p>CONTENT:</p>
             {state.postList[query.id].content}
           </div>
+
+          <Link style={{ height: "30px", marginLeft: "10px" }} to="/Boarder">
+            뒤로
+          </Link>
         </div>
       )}
     </BorderConsumer>
