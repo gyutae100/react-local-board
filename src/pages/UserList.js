@@ -18,9 +18,9 @@ const UserList = () => {
               <th>PASSWORD</th>
             </tr>
 
-            {state.userList.map(currentUserInfo => {
+            {state.userList.map((currentUserInfo, idx) => {
               return (
-                <tr>
+                <tr key={idx}>
                   <td>{currentUserInfo.userIdx}</td>
                   <td>{currentUserInfo.id}</td>{" "}
                   <td>{currentUserInfo.nickName}</td>{" "}

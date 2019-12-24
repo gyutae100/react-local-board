@@ -9,7 +9,9 @@ const UsersContext = createContext({
 
 const UsersProvider = ({ children }) => {
   const [userList, setUserList] = useState([]);
-  const [currentUserIdx, setCurrentUserIdx] = useState(0);
+  const [NextUserIdx, setNextUserIdx] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loginUserIdx, setLoginUserIdx] = useState(false);
 
   const onHandleRegistUser = useCallback(
     (id, password, nickName) => {
@@ -17,18 +19,52 @@ const UsersProvider = ({ children }) => {
         id,
         password,
         nickName,
-        userIdx: currentUserIdx
+        userIdx: NextUserIdx
       };
 
       setUserList(userList.concat(newUser));
-      setCurrentUserIdx(parseInt(currentUserIdx + 1));
+      setNextUserIdx(parseInt(NextUserIdx + 1));
     },
-    [userList, setCurrentUserIdx]
+    [userList, setNextUserIdx]
   );
 
+  const onHandleTryLoggedIn = useCallback(
+    (id, password) => {
+      const isSuccess =
+        userList.find(userInfo => {
+          return userInfo.id === id && userInfo.password === password;
+        }) != undefined;
+
+      if (!isSuccess) {
+        return false;
+      }
+
+      const userInfo = userList.find(userInfo => {
+        return userInfo.id === id;
+      });
+
+      console.log("loginUserId", userInfo.userIdx);
+
+      setIsLoggedIn(true);
+      setLoginUserIdx(userInfo.userIdx);
+
+      console.log("isLoggedIn", isLoggedIn);
+
+      console.log("loginUserIdx", loginUserIdx);
+
+      return true;
+    },
+    [userList, loginUserIdx, isLoggedIn]
+  );
+
+  const onHandleLogOut = useCallback(() => {
+    setIsLoggedIn(false);
+    setLoginUserIdx(-1);
+  }, []);
+
   const value = {
-    state: { userList },
-    actions: { onHandleRegistUser }
+    state: { userList, loginUserIdx, isLoggedIn },
+    actions: { onHandleRegistUser, onHandleTryLoggedIn, onHandleLogOut }
   };
 
   return (

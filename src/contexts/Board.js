@@ -1,25 +1,24 @@
 import React, { createContext, useState, useCallback } from "react";
 
-const BorderContext = createContext({
+const BoardContext = createContext({
   state: { postList: [] },
   actions: {
     InsertPosts: () => {}
   }
 });
 
-const BorderProvider = ({ children }) => {
+const BoardProvider = ({ children }) => {
   const [postList, setPostList] = useState([]);
   const [currentIdx, setCurrentIdx] = useState(0);
 
   const onHandleInsertPost = useCallback(
-    (title, content) => {
+    (title, content, userIdx) => {
       const newPost = {
         id: currentIdx,
-        title: title,
-        content: content
+        title,
+        content,
+        userIdx
       };
-
-      console.log(newPost);
 
       setPostList(postList.concat(newPost));
       setCurrentIdx(parseInt(currentIdx + 1));
@@ -33,12 +32,12 @@ const BorderProvider = ({ children }) => {
   };
 
   return (
-    <BorderContext.Provider value={value}>{children}</BorderContext.Provider>
+    <BoardContext.Provider value={value}>{children}</BoardContext.Provider>
   );
 };
 
-const { Consumer: BorderConsumer } = BorderContext;
+const { Consumer: BoardConsumer } = BoardContext;
 
-export { BorderProvider, BorderConsumer };
+export { BoardProvider, BoardConsumer };
 
-export default BorderContext;
+export default BoardContext;

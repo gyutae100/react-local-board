@@ -1,35 +1,37 @@
 import React from "react";
 import { Route } from "react-router-dom";
-import InsertPost from "./components/InsertPost";
-import Boarder from "./components/Boarder";
-import Menu from "./components/Menu";
-import Home from "./components/Home";
-import ViewPost from "./components/ViewPost";
-import Join from "./components/Join";
-import UserList from "./components/UserList";
+import InsertPost from "./pages/InsertPost";
+import Board from "./pages/Board";
+import NavTop from "./components/NavTop";
+import Home from "./pages/Home";
+import ViewPost from "./pages/ViewPost";
+import Join from "./pages/Join";
+import UserList from "./pages/UserList";
+import Login from "./pages/Login";
 
 import { UsersProvider } from "./contexts/Users";
-import { BorderProvider } from "./contexts/Border";
+import { BoardProvider } from "./contexts/Board";
 
 function App() {
   return (
     <UsersProvider>
-      <BorderProvider>
+      <BoardProvider>
         <div>
           <div>
-            <Menu />
+            <NavTop />
           </div>
           <div>
             <Route path="/" component={Home} exact={true} />
             <Route path="/Home" component={Home} exact={true} />
-            <Route path="/Boarder" component={Boarder} exact={true} />
+            <Route path="/Board" component={Board} exact={true} />
             <Route path="/InsertPost" component={InsertPost} />
             <Route path="/ViewPost" component={ViewPost} />
             <Route path="/Join" component={Join} />
             <Route path="/UserList" component={UserList} />
+            <Route path="/Login" component={Login} />
           </div>
         </div>
-      </BorderProvider>
+      </BoardProvider>
     </UsersProvider>
   );
 }
