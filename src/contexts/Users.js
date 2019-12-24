@@ -1,7 +1,8 @@
 import React, { createContext, useState, useCallback } from "react";
+import { stringify } from "qs";
 
 const UsersContext = createContext({
-  state: { userList: [] },
+  state: { userList: [JSON.parse(localStorage.getItem("USER_LIST"))] },
   action: {
     InsertUser: () => {}
   }
@@ -24,6 +25,7 @@ const UsersProvider = ({ children }) => {
 
       setUserList(userList.concat(newUser));
       setNextUserIdx(parseInt(NextUserIdx + 1));
+      localStorage.setItem("USER_LIST", JSON.stringify(userList));
     },
     [userList, setNextUserIdx]
   );
@@ -43,14 +45,8 @@ const UsersProvider = ({ children }) => {
         return userInfo.id === id;
       });
 
-      console.log("loginUserId", userInfo.userIdx);
-
       setIsLoggedIn(true);
       setLoginUserIdx(userInfo.userIdx);
-
-      console.log("isLoggedIn", isLoggedIn);
-
-      console.log("loginUserIdx", loginUserIdx);
 
       return true;
     },
@@ -59,7 +55,7 @@ const UsersProvider = ({ children }) => {
 
   const onHandleLogOut = useCallback(() => {
     setIsLoggedIn(false);
-    setLoginUserIdx(-1);
+    setLoginUserIdx(-1); //false 값으로 하면 0으로 인식되서 0번째 유저로 설정되더라
   }, []);
 
   const value = {

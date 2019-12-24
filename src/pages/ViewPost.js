@@ -9,18 +9,38 @@ const ViewPost = ({ location }) => {
     ignoreQueryPrefix: true
   });
 
+  const onHandleClickRemovePostBtn = (e, { onHandleRemovePost }) => {
+    onHandleRemovePost(query.id);
+  };
+
+  const isPossibleRemovePost = ({ postList }, { loginUserIdx }) => {
+    return postList.find(currentPost => currentPost.userIdx === loginUserIdx);
+  };
+
+  const getCurrentPostInfo = ({ postList }) => {
+    //query.id는 string타입이다.
+    return postList.find(currentPost => currentPost.id == query.id);
+  };
+
   return (
     <UsersConsumer>
       {({ state: usersState }) => (
         <BoardConsumer>
-          {({ state: boardState }) => (
+          {({ state: boardState, actions: boardActions }) => (
             <div style={{ display: "flex", flexDirection: "column" }}>
               <Link style={{ height: "30px", marginLeft: "10px" }} to="/Board">
                 뒤로
               </Link>
 
-              {usersState.loginUserIdx ===
-                boardState.postList[query.id].userIdx && <button>삭제</button>}
+              {isPossibleRemovePost(boardState, usersState) && (
+                <Link
+                  style={{ height: "30px", marginLeft: "10px" }}
+                  to="/Board"
+                  onClick={e => onHandleClickRemovePostBtn(e, boardActions)}
+                >
+                  삭제
+                </Link>
+              )}
 
               <hr />
 
@@ -31,8 +51,10 @@ const ViewPost = ({ location }) => {
                   alignItems: "center"
                 }}
               >
-                <p>ID:</p>
-                {boardState.postList[query.id].id}
+                <p>
+                  ID:
+                  {getCurrentPostInfo(boardState).id}
+                </p>
               </div>
 
               <div
@@ -42,8 +64,7 @@ const ViewPost = ({ location }) => {
                   alignItems: "center"
                 }}
               >
-                <p>TITLE:</p>
-                {boardState.postList[query.id].title}
+                <p>TITLE:{getCurrentPostInfo(boardState).title}</p>
               </div>
 
               <div
@@ -53,8 +74,7 @@ const ViewPost = ({ location }) => {
                   alignItems: "center"
                 }}
               >
-                <p>CONTENT:</p>
-                {boardState.postList[query.id].content}
+                <p>CONTENT:{getCurrentPostInfo(boardState).content}</p>
               </div>
             </div>
           )}

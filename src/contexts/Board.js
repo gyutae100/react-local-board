@@ -17,7 +17,7 @@ const BoardProvider = ({ children }) => {
         id: currentIdx,
         title,
         content,
-        userIdx
+        userIdx: parseInt(userIdx)
       };
 
       setPostList(postList.concat(newPost));
@@ -26,9 +26,21 @@ const BoardProvider = ({ children }) => {
     [postList, currentIdx]
   );
 
+  const onHandleRemovePost = useCallback(
+    removePostId => {
+      setPostList(
+        postList.filter(currentPostInfo => {
+          //removePostId는 StringType이다.
+          return removePostId != currentPostInfo.id;
+        })
+      );
+    },
+    [postList]
+  );
+
   const value = {
     state: { postList },
-    actions: { onHandleInsertPost }
+    actions: { onHandleInsertPost, onHandleRemovePost }
   };
 
   return (
