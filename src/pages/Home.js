@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { UsersConsumer } from "../contexts/Users";
 
 const Home = () => {
-  console.log("Home");
+  const showNickName = ({ userList }, { loginUserId }) => {
+    const nickName = userList.find(userInfo => loginUserId == userInfo.userId)
+      .nickName;
+
+    return nickName;
+  };
 
   return (
     <UsersConsumer>
@@ -13,7 +18,16 @@ const Home = () => {
           })}
 
           {state.isLoggedIn == true ? (
-            <p>{state.loginUserIdx}님 환영합니다.</p>
+            <p
+              style={{
+                marginLeft: "10px",
+                display: "flex",
+                flexDirection: "row"
+              }}
+            >
+              <p style={{ color: "blue" }}>{showNickName(state, state)}</p>님
+              환영합니다.
+            </p>
           ) : (
             <p>로그인 해주세요</p>
           )}

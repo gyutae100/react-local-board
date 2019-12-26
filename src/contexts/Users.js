@@ -1,5 +1,4 @@
 import React, { createContext, useState, useCallback } from "react";
-import { stringify } from "qs";
 
 const UsersContext = createContext({
   state: { userList: [] },
@@ -8,48 +7,48 @@ const UsersContext = createContext({
   }
 });
 
+const LS_USER_LIST = "LS_USER_LIST";
+const LS_NEXT_USER_ID = "LS_NEXT_USER_ID";
+const LS_IS_LOGGED_IN = "LS_IS_LOGGED_IN";
+const LS_LOGIN_USER_ID = "LS_LOGIN_USER_ID";
+
+const initUserList = () => {
+  const savedUserList = JSON.parse(localStorage.getItem(LS_USER_LIST));
+
+  if (savedUserList === null) {
+    return [];
+  }
+  return savedUserList;
+};
+
+const initNextUserId = () => {
+  const savedUserId = JSON.parse(localStorage.getItem(LS_NEXT_USER_ID));
+
+  if (savedUserId === null) {
+    return 0;
+  }
+  return savedUserId;
+};
+
+const initIsLoggedIn = () => {
+  const savedIsLoggedIn = JSON.parse(localStorage.getItem(LS_IS_LOGGED_IN));
+
+  if (savedIsLoggedIn === null) {
+    return false;
+  }
+  return savedIsLoggedIn;
+};
+
+const initLoginUserId = () => {
+  const savedLoginUserId = JSON.parse(localStorage.getItem(LS_LOGIN_USER_ID));
+
+  if (savedLoginUserId === null) {
+    return -1;
+  }
+  return savedLoginUserId;
+};
+
 const UsersProvider = ({ children }) => {
-  const LS_USER_LIST = "LS_USER_LIST";
-  const LS_NEXT_USER_ID = "LS_NEXT_USER_ID";
-  const LS_IS_LOGGED_IN = "LS_IS_LOGGED_IN";
-  const LS_LOGIN_USER_ID = "LS_LOGIN_USER_ID";
-
-  const initUserList = () => {
-    const savedUserList = JSON.parse(localStorage.getItem(LS_USER_LIST));
-
-    if (savedUserList === null) {
-      return [];
-    }
-    return savedUserList;
-  };
-
-  const initNextUserId = () => {
-    const savedUserId = JSON.parse(localStorage.getItem(LS_NEXT_USER_ID));
-
-    if (savedUserId === null) {
-      return 0;
-    }
-    return savedUserId;
-  };
-
-  const initIsLoggedIn = () => {
-    const savedIsLoggedIn = JSON.parse(localStorage.getItem(LS_IS_LOGGED_IN));
-
-    if (savedIsLoggedIn === null) {
-      return false;
-    }
-    return savedIsLoggedIn;
-  };
-
-  const initLoginUserId = () => {
-    const savedLoginUserId = JSON.parse(localStorage.getItem(LS_LOGIN_USER_ID));
-
-    if (savedLoginUserId === null) {
-      return -1;
-    }
-    return savedLoginUserId;
-  };
-
   const [userList, setUserList] = useState(initUserList());
   const [nextUserId, setNextUserId] = useState(initNextUserId());
   const [isLoggedIn, setIsLoggedIn] = useState(initIsLoggedIn());
