@@ -40,13 +40,43 @@ const Board = () => {
 
               <hr></hr>
 
-              <BootstrapTable data={BorderState.postList}>
-                <TableHeaderColumn isKey dataField="id">
-                  ID
-                </TableHeaderColumn>
-                <TableHeaderColumn dataField="id">id</TableHeaderColumn>
-                <TableHeaderColumn dataField="title">title</TableHeaderColumn>
-              </BootstrapTable>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+              >
+                {BorderState.postList.map((currentPost, idx) => {
+                  const url = `/ViewPost?id=${currentPost.id}`;
+                  return (
+                    <Link key={idx} to={url}>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "Column",
+                          border: "1px solid gray",
+                          borderRadius: "5px",
+                          marginBottom: "10px",
+                          width: "500px"
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center"
+                          }}
+                        >
+                          <p>{currentPost.title}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
           )}
         </BoardConsumer>

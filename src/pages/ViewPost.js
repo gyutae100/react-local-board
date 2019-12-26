@@ -28,7 +28,16 @@ const ViewPost = ({ location }) => {
         <BoardConsumer>
           {({ state: boardState, actions: boardActions }) => (
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <Link style={{ height: "30px", marginLeft: "10px" }} to="/Board">
+              <Link
+                style={{
+                  border: "1px solid gray",
+                  borderRadius: "5px",
+                  marginLeft: "10px",
+                  padding: "10px 10px 10px 10px",
+                  width: "3.5rem"
+                }}
+                to="/Board"
+              >
                 뒤로
               </Link>
 
