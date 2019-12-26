@@ -11,9 +11,8 @@ const PageNation = ({
   const totalPage = Math.ceil(totalElement / pageSize);
 
   const startPage =
-    currentPage <= pageNationSize
-      ? currentPage - (currentPage % (pageNationSize + 1)) + 1
-      : currentPage - (currentPage % (pageNationSize + 1));
+    Math.ceil(currentPage / pageNationSize) * pageNationSize -
+    (pageNationSize - 1);
 
   const tmp = startPage + pageNationSize - 1;
 
@@ -26,10 +25,6 @@ const PageNation = ({
 
   const pages = [];
   console.log("=====================================");
-  console.log(
-    "(currentPage % (pageNationSize + 1)",
-    currentPage % (pageNationSize + 1)
-  );
   console.log("totalElement", totalElement);
   console.log("currentPage", currentPage);
   console.log("pageSize", pageSize);
