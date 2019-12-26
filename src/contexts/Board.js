@@ -8,32 +8,60 @@ const BoardContext = createContext({
 });
 
 const BoardProvider = ({ children }) => {
-  const [postList, setPostList] = useState([]);
-  const [currentIdx, setCurrentIdx] = useState(0);
+  const LS_POST_LIST = "LS_POST_LIST";
+  const LS_LAST_ID = "LS_LAST_ID";
+
+  const initPostList = () => {
+    const savedPostList = JSON.parse(localStorage.getItem(LS_POST_LIST));
+
+    if (savedPostList === null) {
+      return [];
+    }
+
+    return savedPostList;
+  };
+
+  const initcurrentId = () => {
+    const savedLastId = JSON.parse(localStorage.getItem(LS_LAST_ID));
+
+    if (savedLastId === null) {
+      return 0;
+    }
+    return savedLastId;
+  };
+
+  const [postList, setPostList] = useState(initPostList());
+  const [currentId, setcurrentId] = useState(initcurrentId());
+
+  const SaveInfoToLocalStorage = useCallback((lastPostList, lastId) => {
+    localStorage.setItem(LS_POST_LIST, JSON.stringify(lastPostList));
+    localStorage.setItem(LS_LAST_ID, lastId);
+  });
 
   const onHandleInsertPost = useCallback(
     (title, content, userIdx) => {
       const newPost = {
-        id: currentIdx,
+        id: currentId,
         title,
         content,
         userIdx: parseInt(userIdx)
       };
 
       setPostList(postList.concat(newPost));
-      setCurrentIdx(parseInt(currentIdx + 1));
+      setcurrentId(parseInt(currentId + 1));
+      SaveInfoToLocalStorage(postList.concat(newPost), parseInt(currentId + 1));
     },
-    [postList, currentIdx]
+    [postList, currentId]
   );
 
   const onHandleRemovePost = useCallback(
     removePostId => {
-      setPostList(
-        postList.filter(currentPostInfo => {
-          //removePostId는 StringType이다.
-          return removePostId != currentPostInfo.id;
-        })
-      );
+      const updatedPostList = postList.filter(currentPostInfo => {
+        //removePostId는 StringType이다.
+        return removePostId != currentPostInfo.id;
+      });
+      setPostList(updatedPostList);
+      SaveInfoToLocalStorage(updatedPostList, currentId);
     },
     [postList]
   );
