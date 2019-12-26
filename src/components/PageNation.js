@@ -11,12 +11,9 @@ const PageNation = ({
   const totalPage = Math.ceil(totalElement / pageSize);
   const startPage = currentPage - (currentPage % pageNationSize);
 
-  const tmp = currentPage - (currentPage % pageNationSize) + pageNationSize;
+  const tmp = startPage + pageNationSize;
 
-  const endPage =
-    tmp > totalPage
-      ? totalPage
-      : currentPage - (currentPage % pageNationSize) + pageNationSize;
+  const endPage = tmp > totalPage ? totalPage : tmp;
 
   const isPrev = Math.floor(currentPage / pageNationSize) > 0 ? true : false;
   const isNext =
