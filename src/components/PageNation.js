@@ -9,13 +9,15 @@ const PageNation = ({
   pageNationSize /*페이지 네이션 내 표기 할 페이지 갯수 */
 }) => {
   const totalPage = Math.ceil(totalElement / pageSize);
-  const startPage = currentPage - (currentPage % pageNationSize);
 
-  const tmp = startPage + pageNationSize;
+  const startPage = currentPage - (currentPage % (pageNationSize + 1));
+
+  const tmp = startPage + pageNationSize - 1;
 
   const endPage = tmp > totalPage ? totalPage : tmp;
 
-  const isPrev = Math.floor(currentPage / pageNationSize) > 0 ? true : false;
+  const isPrev =
+    Math.floor(currentPage / (pageNationSize + 1)) > 0 ? true : false;
   const isNext =
     (startPage + pageNationSize - 1) * pageSize < totalElement ? true : false;
 
@@ -31,10 +33,14 @@ const PageNation = ({
   console.log("isNext", isNext);
   console.log("pageNationSize", pageNationSize);
 
-  for (let idx = startPage; idx < endPage; idx++) {
+  const correctValue = startPage < pageNationSize ? 1 : 0;
+  for (let idx = startPage; idx <= endPage; idx++) {
     pages.push(
-      <Link to={`/UserList?currentPage=${idx}`} style={{ marginLeft: "10px" }}>
-        {idx + 1}
+      <Link
+        to={`/UserList?currentPage=${idx + correctValue}`}
+        style={{ marginLeft: "10px" }}
+      >
+        {idx + correctValue}
       </Link>
     );
   }
@@ -52,7 +58,7 @@ const PageNation = ({
         <Link to={`/UserList?currentPage=${startPage - 1}`}>Prev</Link>
       )}
       {pages}
-      {isNext && <Link to={`/UserList?currentPage=${endPage}`}>next</Link>}
+      {isNext && <Link to={`/UserList?currentPage=${endPage + 2}`}>next</Link>}
     </div>
   );
 };

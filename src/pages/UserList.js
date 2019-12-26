@@ -46,8 +46,8 @@ const UserList = ({ location }) => {
             //페이지네이션
             data={state.userList.filter(
               (element, idx) =>
-                query.currentPage * pageSize <= idx &&
-                query.currentPage * pageSize + pageSize > idx
+                (query.currentPage - 1) * pageSize <= idx &&
+                (query.currentPage - 1) * pageSize + pageSize > idx
             )}
           >
             <TableHeaderColumn isKey dataField="id">
