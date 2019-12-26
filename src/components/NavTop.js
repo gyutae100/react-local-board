@@ -51,7 +51,7 @@ const NavTop = () => {
             </Link>
 
             <Link
-              to="/UserList"
+              to="/UserList?currentPage=1"
               style={{
                 border: "1px solid gray",
                 borderRadius: "5px",

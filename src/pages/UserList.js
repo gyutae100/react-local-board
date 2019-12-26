@@ -4,8 +4,17 @@ import "react-bootstrap-table/dist/react-bootstrap-table-all.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { UsersConsumer } from "../contexts/Users";
 import { Link } from "react-router-dom";
+import PageNation from "../components/PageNation";
+import qs from "qs";
 
-const UserList = () => {
+const pageSize = 5;
+const pageNationSize = 5;
+
+const UserList = ({ location }) => {
+  const query = qs.parse(location.search, {
+    ignoreQueryPrefix: true
+  });
+
   return (
     <UsersConsumer>
       {({ state }) => (
@@ -33,7 +42,14 @@ const UserList = () => {
           </div>
           <hr></hr>
 
-          <BootstrapTable data={state.userList}>
+          <BootstrapTable
+            //페이지네이션
+            data={state.userList.filter(
+              (element, idx) =>
+                query.currentPage * pageSize <= idx &&
+                query.currentPage * pageSize + pageSize > idx
+            )}
+          >
             <TableHeaderColumn isKey dataField="id">
               ID
             </TableHeaderColumn>
@@ -41,6 +57,13 @@ const UserList = () => {
             <TableHeaderColumn dataField="nickName">nickName</TableHeaderColumn>
             <TableHeaderColumn dataField="password">password</TableHeaderColumn>
           </BootstrapTable>
+
+          <PageNation
+            totalElement={state.userList.length}
+            currentPage={parseInt(query.currentPage)}
+            pageSize={pageSize}
+            pageNationSize={pageNationSize}
+          />
         </div>
       )}
     </UsersConsumer>

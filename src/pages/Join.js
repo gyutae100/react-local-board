@@ -43,7 +43,7 @@ const Join = () => {
 
           <Link
             style={{ height: "30px" }}
-            to="/UserList"
+            to="/UserList?currentPage=0"
             onClick={e => onHandleRegisteUser(e, actions)}
           >
             등록
