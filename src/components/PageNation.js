@@ -10,7 +10,10 @@ const PageNation = ({
 }) => {
   const totalPage = Math.ceil(totalElement / pageSize);
 
-  const startPage = currentPage - (currentPage % (pageNationSize + 1));
+  const startPage =
+    currentPage <= pageNationSize
+      ? currentPage - (currentPage % (pageNationSize + 1)) + 1
+      : currentPage - (currentPage % (pageNationSize + 1));
 
   const tmp = startPage + pageNationSize - 1;
 
@@ -22,7 +25,11 @@ const PageNation = ({
     (startPage + pageNationSize - 1) * pageSize < totalElement ? true : false;
 
   const pages = [];
-
+  console.log("=====================================");
+  console.log(
+    "(currentPage % (pageNationSize + 1)",
+    currentPage % (pageNationSize + 1)
+  );
   console.log("totalElement", totalElement);
   console.log("currentPage", currentPage);
   console.log("pageSize", pageSize);
@@ -33,14 +40,10 @@ const PageNation = ({
   console.log("isNext", isNext);
   console.log("pageNationSize", pageNationSize);
 
-  const correctValue = startPage < pageNationSize ? 1 : 0;
   for (let idx = startPage; idx <= endPage; idx++) {
     pages.push(
-      <Link
-        to={`/UserList?currentPage=${idx + correctValue}`}
-        style={{ marginLeft: "10px" }}
-      >
-        {idx + correctValue}
+      <Link to={`/UserList?currentPage=${idx}`} style={{ marginLeft: "10px" }}>
+        {idx}
       </Link>
     );
   }
@@ -58,7 +61,7 @@ const PageNation = ({
         <Link to={`/UserList?currentPage=${startPage - 1}`}>Prev</Link>
       )}
       {pages}
-      {isNext && <Link to={`/UserList?currentPage=${endPage + 2}`}>next</Link>}
+      {isNext && <Link to={`/UserList?currentPage=${endPage + 1}`}>next</Link>}
     </div>
   );
 };
