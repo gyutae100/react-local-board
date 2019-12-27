@@ -6,7 +6,8 @@ const PageNation = ({
   totalElement /*총 페이지 갯수*/,
   currentPage /*현재 페이지*/,
   pageSize /*페이지 내 개시물 갯수*/,
-  pageNationSize /*페이지 네이션 내 표기 할 페이지 갯수 */
+  pageNationSize /*페이지 네이션 내 표기 할 페이지 갯수 */,
+  addresFormat
 }) => {
   const totalPage = Math.ceil(totalElement / pageSize);
 
@@ -37,7 +38,14 @@ const PageNation = ({
 
   for (let idx = startPage; idx <= endPage; idx++) {
     pages.push(
-      <Link to={`/UserList?currentPage=${idx}`} style={{ marginLeft: "10px" }}>
+      <Link
+        to={`${addresFormat}?currentPage=${idx}`}
+        style={
+          idx === currentPage
+            ? { marginLeft: "10px", color: "red" }
+            : { marginLeft: "10px" }
+        }
+      >
         {idx}
       </Link>
     );
@@ -53,10 +61,12 @@ const PageNation = ({
       }}
     >
       {isPrev && (
-        <Link to={`/UserList?currentPage=${startPage - 1}`}>Prev</Link>
+        <Link to={`${addresFormat}?currentPage=${startPage - 1}`}>Prev</Link>
       )}
       {pages}
-      {isNext && <Link to={`/UserList?currentPage=${endPage + 1}`}>next</Link>}
+      {isNext && (
+        <Link to={`${addresFormat}?currentPage=${endPage + 1}`}>next</Link>
+      )}
     </div>
   );
 };

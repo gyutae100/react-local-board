@@ -39,7 +39,7 @@ const NavTop = () => {
             </Link>
 
             <Link
-              to="/Board"
+              to="/Board?currentPage=1"
               style={{
                 border: "1px solid gray",
                 borderRadius: "5px",

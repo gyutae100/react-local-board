@@ -5,15 +5,23 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BoardConsumer } from "../contexts/Board";
 import { UsersConsumer } from "../contexts/Users";
 import { Link } from "react-router-dom";
+import qs from "qs";
+import PageNation from "../components/PageNation";
 
-const Board = () => {
+const pageSize = 5;
+const pageNationSize = 5;
+
+const Board = ({ location }) => {
+  const query = qs.parse(location.search, {
+    ignoreQueryPrefix: true
+  });
   return (
     <UsersConsumer>
       {({ state: UsersState }) => (
         <BoardConsumer>
           {({ state: BorderState }) => (
             <div>
-              {UsersState.isLoggedIn == true ? (
+              {UsersState.isLoggedIn === true ? (
                 <div
                   style={{
                     display: "flex",
@@ -48,35 +56,49 @@ const Board = () => {
                   justifyContent: "center"
                 }}
               >
-                {BorderState.postList.map((currentPost, idx) => {
-                  const url = `/ViewPost?id=${currentPost.id}`;
-                  return (
-                    <Link key={idx} to={url}>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "Column",
-                          border: "1px solid gray",
-                          borderRadius: "5px",
-                          marginBottom: "10px",
-                          width: "500px"
-                        }}
-                      >
+                {BorderState.postList
+                  .filter((currentPost, idx) => {
+                    return (
+                      (query.currentPage - 1) * pageSize <= idx &&
+                      (query.currentPage - 1) * pageSize + pageSize > idx
+                    );
+                  })
+                  .map((currentPost, idx) => {
+                    const url = `/ViewPost?id=${currentPost.id}`;
+                    return (
+                      <Link key={idx} to={url}>
                         <div
                           style={{
                             display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            justifyContent: "center"
+                            flexDirection: "Column",
+                            border: "1px solid gray",
+                            borderRadius: "5px",
+                            marginBottom: "10px",
+                            width: "500px"
                           }}
                         >
-                          <p>{currentPost.title}</p>
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              justifyContent: "center"
+                            }}
+                          >
+                            <p>{currentPost.title}</p>
+                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  );
-                })}
+                      </Link>
+                    );
+                  })}
               </div>
+              <PageNation
+                totalElement={BorderState.postList.length}
+                currentPage={parseInt(query.currentPage)}
+                pageSize={pageSize}
+                pageNationSize={pageNationSize}
+                addresFormat={"/Board"}
+              />
             </div>
           )}
         </BoardConsumer>

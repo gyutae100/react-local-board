@@ -8,8 +8,8 @@ const InsertPost = () => {
   const [content, setContent] = useState("");
 
   const onHandleInsertPost = useCallback(
-    (e, { onHandleInsertPost }, { loginUserIdx }) => {
-      onHandleInsertPost(title, content, loginUserIdx);
+    (e, { onHandleInsertPost }, { loginUserId }) => {
+      onHandleInsertPost(title, content, loginUserId);
     },
     [title, content]
   );

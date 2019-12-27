@@ -63,6 +63,7 @@ const UserList = ({ location }) => {
             currentPage={parseInt(query.currentPage)}
             pageSize={pageSize}
             pageNationSize={pageNationSize}
+            addresFormat={"/UserList"}
           />
         </div>
       )}

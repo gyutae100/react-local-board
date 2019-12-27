@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BoardConsumer } from "../contexts/Board";
 import { UsersConsumer } from "../contexts/Users";
 import { Link } from "react-router-dom";
@@ -9,17 +9,30 @@ const ViewPost = ({ location }) => {
     ignoreQueryPrefix: true
   });
 
+  const [isModifyMode, setIsModifyMode] = useState(false);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
   const onHandleClickRemovePostBtn = (e, { onHandleRemovePost }) => {
     onHandleRemovePost(query.id);
   };
 
-  const isPossibleRemovePost = ({ postList }, { loginUserIdx }) => {
-    return postList.find(currentPost => currentPost.userIdx === loginUserIdx);
+  const isPossibleRemovePost = ({ postList }, { loginUserId }) => {
+    console.log(postList);
+    console.log(loginUserId);
+    return postList.find(currentPost => currentPost.userIdx === loginUserId);
+  };
+
+  const isPossibleModifyPost = ({ postList }, { loginUserId }) => {
+    console.log(postList);
+    console.log(loginUserId);
+    return postList.find(currentPost => currentPost.userIdx === loginUserId);
   };
 
   const getCurrentPostInfo = ({ postList }) => {
+    console.log(postList);
     //query.id는 string타입이다.
-    return postList.find(currentPost => currentPost.id == query.id);
+    return postList.find(currentPost => currentPost.id === parseInt(query.id));
   };
 
   return (
@@ -28,28 +41,52 @@ const ViewPost = ({ location }) => {
         <BoardConsumer>
           {({ state: boardState, actions: boardActions }) => (
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <Link
-                style={{
-                  border: "1px solid gray",
-                  borderRadius: "5px",
-                  marginLeft: "10px",
-                  padding: "10px 10px 10px 10px",
-                  width: "3.5rem"
-                }}
-                to="/Board"
-              >
-                뒤로
-              </Link>
-
-              {isPossibleRemovePost(boardState, usersState) && (
+              <div style={{ display: "flex", flexDirection: "row" }}>
                 <Link
-                  style={{ height: "30px", marginLeft: "10px" }}
-                  to="/Board"
-                  onClick={e => onHandleClickRemovePostBtn(e, boardActions)}
+                  style={{
+                    border: "1px solid gray",
+                    borderRadius: "5px",
+                    marginLeft: "10px",
+                    padding: "10px 10px 10px 10px",
+                    width: "3.5rem"
+                  }}
+                  to="/Board?currentPage=1"
                 >
-                  삭제
+                  뒤로
                 </Link>
-              )}
+
+                {isPossibleRemovePost(boardState, usersState) && (
+                  <Link
+                    style={{
+                      border: "1px solid gray",
+                      borderRadius: "5px",
+                      marginLeft: "10px",
+                      padding: "10px 10px 10px 10px",
+                      width: "3.5rem"
+                    }}
+                    to="/Board?currentPage=1"
+                    onClick={e => onHandleClickRemovePostBtn(e, boardActions)}
+                  >
+                    삭제
+                  </Link>
+                )}
+
+                {isPossibleModifyPost(boardState, usersState) && (
+                  <div
+                    style={{
+                      border: "1px solid gray",
+                      borderRadius: "5px",
+                      marginLeft: "10px",
+                      padding: "10px 10px 10px 10px",
+                      width: "3.5rem"
+                    }}
+                    onClick={e => onHandleClickRemovePostBtn(e, boardActions)}
+                  >
+                    {" "}
+                    수정
+                  </div>
+                )}
+              </div>
 
               <hr />
 
