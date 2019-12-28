@@ -17,6 +17,11 @@ const ViewPost = ({ location }) => {
     onHandleRemovePost(query.id);
   };
 
+  //작업 중
+  const onHandleClickModifyPostBtn = (e, { onHandleModifyPost }) => {
+    setIsModifyMode(true);
+  };
+
   const isPossibleRemovePost = ({ postList }, { loginUserId }) => {
     console.log(postList);
     console.log(loginUserId);
@@ -41,21 +46,9 @@ const ViewPost = ({ location }) => {
         <BoardConsumer>
           {({ state: boardState, actions: boardActions }) => (
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <div style={{ display: "flex", flexDirection: "row" }}>
-                <Link
-                  style={{
-                    border: "1px solid gray",
-                    borderRadius: "5px",
-                    marginLeft: "10px",
-                    padding: "10px 10px 10px 10px",
-                    width: "3.5rem"
-                  }}
-                  to="/Board?currentPage=1"
-                >
-                  뒤로
-                </Link>
-
-                {isPossibleRemovePost(boardState, usersState) && (
+              {/*수정 모드가 아닐 때 상단 기능 버튼 */}
+              {!isModifyMode && (
+                <div style={{ display: "flex", flexDirection: "row" }}>
                   <Link
                     style={{
                       border: "1px solid gray",
@@ -65,63 +58,125 @@ const ViewPost = ({ location }) => {
                       width: "3.5rem"
                     }}
                     to="/Board?currentPage=1"
-                    onClick={e => onHandleClickRemovePostBtn(e, boardActions)}
                   >
-                    삭제
+                    뒤로
                   </Link>
-                )}
 
-                {isPossibleModifyPost(boardState, usersState) && (
-                  <div
-                    style={{
-                      border: "1px solid gray",
-                      borderRadius: "5px",
-                      marginLeft: "10px",
-                      padding: "10px 10px 10px 10px",
-                      width: "3.5rem"
-                    }}
-                    onClick={e => onHandleClickRemovePostBtn(e, boardActions)}
-                  >
-                    {" "}
-                    수정
-                  </div>
-                )}
-              </div>
+                  {isPossibleRemovePost(boardState, usersState) && (
+                    <Link
+                      style={{
+                        border: "1px solid gray",
+                        borderRadius: "5px",
+                        marginLeft: "10px",
+                        padding: "10px 10px 10px 10px",
+                        width: "3.5rem"
+                      }}
+                      to="/Board?currentPage=1"
+                      onClick={e => onHandleClickRemovePostBtn(e, boardActions)}
+                    >
+                      삭제
+                    </Link>
+                  )}
+
+                  {isPossibleModifyPost(boardState, usersState) && (
+                    <div
+                      style={{
+                        border: "1px solid gray",
+                        borderRadius: "5px",
+                        marginLeft: "10px",
+                        padding: "10px 10px 10px 10px",
+                        width: "3.5rem"
+                      }}
+                      onClick={e => onHandleClickModifyPostBtn(e, boardActions)}
+                    >
+                      {" "}
+                      수정
+                    </div>
+                  )}
+                </div>
+              )}
 
               <hr />
 
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center"
-                }}
-              >
-                <p>
-                  ID:
-                  {getCurrentPostInfo(boardState).id}
-                </p>
-              </div>
+              {/*수정 모드가 아닐 때 하단 게시글 정보 */}
+              {!isModifyMode && (
+                <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center"
+                    }}
+                  >
+                    <p>
+                      ID:
+                      {getCurrentPostInfo(boardState).id}
+                    </p>
+                  </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center"
-                }}
-              >
-                <p>TITLE:{getCurrentPostInfo(boardState).title}</p>
-              </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center"
+                    }}
+                  >
+                    <p>TITLE:{getCurrentPostInfo(boardState).title}</p>
+                  </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center"
-                }}
-              >
-                <p>CONTENT:{getCurrentPostInfo(boardState).content}</p>
-              </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center"
+                    }}
+                  >
+                    <p>CONTENT:{getCurrentPostInfo(boardState).content}</p>
+                  </div>
+                </div>
+              )}
+
+              {/*수정 모드가 아닐 때 하단 게시글 정보 */}
+              {isModifyMode && (
+                <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center"
+                    }}
+                  >
+                    <textarea
+                      style={{ height: "30px", width: "300px" }}
+                    ></textarea>
+
+                    <textarea
+                      style={{
+                        height: "300px",
+                        width: "300px",
+                        marginTop: "20px"
+                      }}
+                    ></textarea>
+
+                    <div>
+                      <Link
+                        style={{ height: "30px" }}
+                        to="/Board"
+                        onClick={e => (e, boardActions, usersState)}
+                      >
+                        등록
+                      </Link>
+
+                      <Link
+                        style={{ height: "30px", marginLeft: "10px" }}
+                        to="/Board"
+                      >
+                        취소
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </BoardConsumer>

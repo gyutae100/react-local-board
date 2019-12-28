@@ -25,24 +25,36 @@ const Join = () => {
   return (
     <UsersConsumer>
       {({ actions }) => (
-        <div>
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <p>ID</p>
-            <input name="id" onChange={onHandleSetId}></input>
-          </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <input placeholder="id" name="id" onChange={onHandleSetId}></input>
 
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <p>PASSWORD</p>
-            <input name="password" onChange={onHandleSetPassword}></input>
-          </div>
+          <input
+            placeholder="password"
+            name="password"
+            onChange={onHandleSetPassword}
+          ></input>
 
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <p>NICKNAME</p>
-            <input name="nickName" onChange={onHandleSetNickName}></input>
-          </div>
+          <input
+            placeholder="nickname"
+            name="nickName"
+            onChange={onHandleSetNickName}
+          ></input>
 
           <Link
-            style={{ height: "30px" }}
+            style={{
+              display: "flex",
+              flexDirection: "Column",
+              border: "1px solid gray",
+              borderRadius: "5px",
+              marginBottom: "10px"
+            }}
             to="/UserList?currentPage=1"
             onClick={e => onHandleRegisteUser(e, actions)}
           >
