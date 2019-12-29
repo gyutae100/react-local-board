@@ -11,6 +11,8 @@ const BoardContext = createContext({
 
 const LS_POST_LIST = "LS_POST_LIST";
 const LS_LAST_ID = "LS_LAST_ID";
+const LS_COMMENT_LIST = "LS_COMMENT_LIST";
+const LS_COMMENT_ID = "LS_COMMENT_ID";
 
 const initPostList = () => {
   const savedPostList = JSON.parse(localStorage.getItem(LS_POST_LIST));
@@ -31,14 +33,45 @@ const initcurrentId = () => {
   return savedLastId;
 };
 
+const initCommentList = () => {
+  const savedCommentList = JSON.parse(localStorage.getItem(LS_COMMENT_LIST));
+
+  if (savedCommentList === null) {
+    return [];
+  }
+  return savedCommentList;
+};
+
+const initCommentId = () => {
+  const savedCommentId = JSON.parse(localStorage.getItem(LS_COMMENT_ID));
+
+  if (savedCommentId === null) {
+    return 0;
+  }
+  return savedCommentId;
+};
+
 const BoardProvider = ({ children }) => {
   const [postList, setPostList] = useState(initPostList());
   const [currentId, setcurrentId] = useState(initcurrentId());
 
-  const SaveInfoToLocalStorage = useCallback((lastPostList, lastId) => {
-    localStorage.setItem(LS_POST_LIST, JSON.stringify(lastPostList));
-    localStorage.setItem(LS_LAST_ID, lastId);
-  });
+  const [commentList, setCommentList] = useState(initCommentList());
+  const [commentId, setCommentId] = useState(initCommentId());
+
+  const SaveInfoToLocalStorage = useCallback(
+    (lastPostList, lastId, lastCommentList, lastCommentId) => {
+      if (lastPostList !== null)
+        localStorage.setItem(LS_POST_LIST, JSON.stringify(lastPostList));
+
+      if (lastId !== null) localStorage.setItem(LS_LAST_ID, lastId);
+
+      if (lastCommentList !== null)
+        localStorage.setItem(LS_COMMENT_LIST, JSON.stringify(lastCommentList));
+
+      if (lastCommentId !== null)
+        localStorage.setItem(LS_COMMENT_ID, lastCommentId);
+    }
+  );
 
   const onHandleInsertPost = useCallback(
     (title, content, userId) => {
@@ -51,7 +84,12 @@ const BoardProvider = ({ children }) => {
 
       setPostList(postList.concat(newPost));
       setcurrentId(parseInt(currentId + 1));
-      SaveInfoToLocalStorage(postList.concat(newPost), parseInt(currentId + 1));
+      SaveInfoToLocalStorage(
+        postList.concat(newPost),
+        parseInt(currentId + 1),
+        null,
+        null
+      );
     },
     [postList, currentId]
   );
@@ -63,7 +101,7 @@ const BoardProvider = ({ children }) => {
         return removePostId != currentPostInfo.id;
       });
       setPostList(updatedPostList);
-      SaveInfoToLocalStorage(updatedPostList, currentId);
+      SaveInfoToLocalStorage(updatedPostList, currentId, null, null);
     },
     [postList]
   );
@@ -71,14 +109,12 @@ const BoardProvider = ({ children }) => {
   const onHandleApplyModifedPost = useCallback(
     (modifiedPostId, title, content, userId) => {
       const modifiedPost = {
-        id: modifiedPostId,
+        id: parseInt(modifiedPostId),
         title,
         content,
         userIdx: parseInt(userId)
       };
 
-      console.log("mid", modifiedPostId);
-      console.log("mp", modifiedPost);
       const modifiedPostList = postList.map(post => {
         if (post.id !== parseInt(modifiedPostId)) {
           return post;
@@ -89,15 +125,34 @@ const BoardProvider = ({ children }) => {
 
       console.log("mpl", modifiedPostList);
       setPostList(modifiedPostList);
+      SaveInfoToLocalStorage(modifiedPostList, currentId, null, null);
     }
   );
 
+  const onHandleAddComment = useCallback((loginUserId, postId, comment) => {
+    const newComment = {
+      id: commentId,
+      userId: loginUserId,
+      postId,
+      comment
+    };
+
+    const updatedCommentList = commentList.concat(newComment);
+    setCommentList(updatedCommentList);
+    const updatedCommentId = commentId + 1;
+    setCommentId(updatedCommentId);
+    SaveInfoToLocalStorage(null, null, updatedCommentList, updatedCommentId);
+
+    return true;
+  });
+
   const value = {
-    state: { postList },
+    state: { postList, commentList },
     actions: {
       onHandleInsertPost,
       onHandleRemovePost,
-      onHandleApplyModifedPost
+      onHandleApplyModifedPost,
+      onHandleAddComment
     }
   };
 

@@ -85,7 +85,7 @@ const Board = ({ location }) => {
                               justifyContent: "center"
                             }}
                           >
-                            <p>{currentPost.title}</p>
+                            <p>제목: {currentPost.title}</p>
                           </div>
                         </div>
                       </Link>

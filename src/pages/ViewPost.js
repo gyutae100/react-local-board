@@ -13,12 +13,18 @@ const ViewPost = ({ location }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
+  const [comment, setComment] = useState("");
+
   const onHandleSetTitle = e => {
     setTitle(e.target.value);
   };
 
   const onHandleSetContent = e => {
     setContent(e.target.value);
+  };
+
+  const onHandleSetComment = e => {
+    setComment(e.target.value);
   };
 
   const onHandleClickRemovePostBtn = (e, { onHandleRemovePost }) => {
@@ -35,6 +41,21 @@ const ViewPost = ({ location }) => {
   ) => {
     onHandleApplyModifedPost(parseInt(query.id), title, content, loginUserId);
     setIsModifyMode(false);
+  };
+
+  const onHandleClickAddComment = ({ loginUserId }, { onHandleAddComment }) => {
+    const result = onHandleAddComment(loginUserId, parseInt(query.id), comment);
+    if (result) {
+      alert("댓글 달기 성공");
+      setComment("");
+    }
+  };
+
+  const showNickName = ({ userList }, userId) => {
+    const nickName = userList.find(userInfo => userId == userInfo.userId)
+      .nickName;
+
+    return nickName;
   };
 
   const isPossibleRemovePost = ({ postList }, { loginUserId }) => {
@@ -210,6 +231,41 @@ const ViewPost = ({ location }) => {
                   </div>
                 </div>
               )}
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  border: "1px solid black",
+                  borderRadius: "5px"
+                }}
+              >
+                <p>댓글 목록({boardState.commentList.length})</p>
+                {boardState.commentList.map(commentObj => {
+                  return (
+                    <div style={{ display: "flex", flexDirection: "row" }}>
+                      {" "}
+                      {showNickName(usersState, commentObj.userId)}
+                      <p> : </p>
+                      {commentObj.comment}
+                    </div>
+                  );
+                })}
+
+                <input
+                  placeholder="댓글 내용"
+                  name="addComment"
+                  onChange={onHandleSetComment}
+                  value={comment}
+                ></input>
+                <button
+                  onClick={() =>
+                    onHandleClickAddComment(usersState, boardActions)
+                  }
+                >
+                  댓글 달기
+                </button>
+              </div>
             </div>
           )}
         </BoardConsumer>

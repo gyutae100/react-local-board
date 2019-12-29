@@ -32,12 +32,13 @@ const LoggedIn = ({ location, match, history }) => {
       {({ actions }) => (
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", flexDirection: "row" }}>
-            <p>ID</p>
-            <input onChange={handleOnChangeId}></input>
+            <input placeholder={"id"} onChange={handleOnChangeId}></input>
           </div>
           <div style={{ display: "flex", flexDirection: "row" }}>
-            <p>PASSWORD</p>
-            <input onChange={handleOnChangePassword}></input>
+            <input
+              placeholder={"password"}
+              onChange={handleOnChangePassword}
+            ></input>
           </div>
           <button onClick={e => handleOnTryLoggedIn(e, actions)}>로그인</button>
         </div>
