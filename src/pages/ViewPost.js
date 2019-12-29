@@ -51,6 +51,16 @@ const ViewPost = ({ location }) => {
     }
   };
 
+  const onHandleClickDeleteComment = (
+    deleteCommentId,
+    { onHandleDeleteComment }
+  ) => {
+    const result = onHandleDeleteComment(deleteCommentId);
+    if (result) {
+      alert("댓글 삭제 성공");
+    }
+  };
+
   const showNickName = ({ userList }, userId) => {
     const nickName = userList.find(userInfo => userId == userInfo.userId)
       .nickName;
@@ -248,6 +258,18 @@ const ViewPost = ({ location }) => {
                       {showNickName(usersState, commentObj.userId)}
                       <p> : </p>
                       {commentObj.comment}
+                      {commentObj.userId === usersState.loginUserId && (
+                        <button
+                          onClick={() =>
+                            onHandleClickDeleteComment(
+                              commentObj.id,
+                              boardActions
+                            )
+                          }
+                        >
+                          삭제
+                        </button>
+                      )}
                     </div>
                   );
                 })}

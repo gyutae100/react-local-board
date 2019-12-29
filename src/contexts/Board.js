@@ -146,13 +146,27 @@ const BoardProvider = ({ children }) => {
     return true;
   });
 
+  const onHandleDeleteComment = useCallback(deleteCommentId => {
+    console.log("xxxxxxxxxxxxxx");
+    const updatedCommentList = commentList.filter(currentCommentObj => {
+      if (currentCommentObj.id === deleteCommentId) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    setCommentList(updatedCommentList);
+    SaveInfoToLocalStorage(null, null, updatedCommentList, null);
+  });
+
   const value = {
     state: { postList, commentList },
     actions: {
       onHandleInsertPost,
       onHandleRemovePost,
       onHandleApplyModifedPost,
-      onHandleAddComment
+      onHandleAddComment,
+      onHandleDeleteComment
     }
   };
 
