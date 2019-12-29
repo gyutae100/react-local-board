@@ -86,6 +86,18 @@ const Board = ({ location }) => {
                             }}
                           >
                             <p>제목: {currentPost.title}</p>
+                            <p>
+                              댓글:
+                              {BorderState.commentList.reduce(
+                                (prevValue, currentObj) => {
+                                  if (currentObj.postId == currentPost.id) {
+                                    prevValue = prevValue + 1;
+                                    return prevValue;
+                                  }
+                                },
+                                0
+                              )}
+                            </p>
                           </div>
                         </div>
                       </Link>
