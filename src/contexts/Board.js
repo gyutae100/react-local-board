@@ -1,3 +1,5 @@
+//일반 게시판
+
 import React, { createContext, useState, useCallback } from "react";
 
 const BoardContext = createContext({
@@ -39,12 +41,12 @@ const BoardProvider = ({ children }) => {
   });
 
   const onHandleInsertPost = useCallback(
-    (title, content, userIdx) => {
+    (title, content, userId) => {
       const newPost = {
         id: currentId,
         title,
         content,
-        userIdx: parseInt(userIdx)
+        userIdx: parseInt(userId)
       };
 
       setPostList(postList.concat(newPost));
@@ -66,9 +68,37 @@ const BoardProvider = ({ children }) => {
     [postList]
   );
 
+  const onHandleApplyModifedPost = useCallback(
+    (modifiedPostId, title, content, userId) => {
+      const modifiedPost = {
+        id: modifiedPostId,
+        title,
+        content,
+        userIdx: parseInt(userId)
+      };
+
+      console.log("mid", modifiedPostId);
+      console.log("mp", modifiedPost);
+      const modifiedPostList = postList.map(post => {
+        if (post.id !== parseInt(modifiedPostId)) {
+          return post;
+        } else {
+          return modifiedPost;
+        }
+      });
+
+      console.log("mpl", modifiedPostList);
+      setPostList(modifiedPostList);
+    }
+  );
+
   const value = {
     state: { postList },
-    actions: { onHandleInsertPost, onHandleRemovePost }
+    actions: {
+      onHandleInsertPost,
+      onHandleRemovePost,
+      onHandleApplyModifedPost
+    }
   };
 
   return (

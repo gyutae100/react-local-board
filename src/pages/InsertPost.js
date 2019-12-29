@@ -53,7 +53,7 @@ const InsertPost = () => {
               <div>
                 <Link
                   style={{ height: "30px" }}
-                  to="/Board"
+                  to="/Board?currentPage=1"
                   onClick={e => onHandleInsertPost(e, boardActions, usersState)}
                 >
                   등록
@@ -61,7 +61,7 @@ const InsertPost = () => {
 
                 <Link
                   style={{ height: "30px", marginLeft: "10px" }}
-                  to="/Board"
+                  to="/Board?currentPage=1"
                 >
                   취소
                 </Link>

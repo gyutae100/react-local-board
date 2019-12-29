@@ -13,13 +13,28 @@ const ViewPost = ({ location }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
+  const onHandleSetTitle = e => {
+    setTitle(e.target.value);
+  };
+
+  const onHandleSetContent = e => {
+    setContent(e.target.value);
+  };
+
   const onHandleClickRemovePostBtn = (e, { onHandleRemovePost }) => {
     onHandleRemovePost(query.id);
   };
 
-  //작업 중
-  const onHandleClickModifyPostBtn = (e, { onHandleModifyPost }) => {
+  const onHandleClickModifyPostBtn = e => {
     setIsModifyMode(true);
+  };
+
+  const onHandleClickApplyModifiedPostBtn = (
+    { loginUserId },
+    { onHandleApplyModifedPost }
+  ) => {
+    onHandleApplyModifedPost(parseInt(query.id), title, content, loginUserId);
+    setIsModifyMode(false);
   };
 
   const isPossibleRemovePost = ({ postList }, { loginUserId }) => {
@@ -87,7 +102,7 @@ const ViewPost = ({ location }) => {
                         padding: "10px 10px 10px 10px",
                         width: "3.5rem"
                       }}
-                      onClick={e => onHandleClickModifyPostBtn(e, boardActions)}
+                      onClick={e => onHandleClickModifyPostBtn(e)}
                     >
                       {" "}
                       수정
@@ -136,7 +151,7 @@ const ViewPost = ({ location }) => {
                 </div>
               )}
 
-              {/*수정 모드가 아닐 때 하단 게시글 정보 */}
+              {/*수정 모드 하단 게시글 정보 */}
               {isModifyMode && (
                 <div>
                   <div
@@ -148,6 +163,12 @@ const ViewPost = ({ location }) => {
                   >
                     <textarea
                       style={{ height: "30px", width: "300px" }}
+                      value={
+                        title === ""
+                          ? getCurrentPostInfo(boardState).title
+                          : title
+                      }
+                      onChange={onHandleSetTitle}
                     ></textarea>
 
                     <textarea
@@ -156,23 +177,35 @@ const ViewPost = ({ location }) => {
                         width: "300px",
                         marginTop: "20px"
                       }}
+                      value={
+                        content === ""
+                          ? getCurrentPostInfo(boardState).content
+                          : content
+                      }
+                      onChange={onHandleSetContent}
                     ></textarea>
 
                     <div>
-                      <Link
+                      <button
                         style={{ height: "30px" }}
                         to="/Board"
-                        onClick={e => (e, boardActions, usersState)}
+                        onClick={() =>
+                          onHandleClickApplyModifiedPostBtn(
+                            usersState,
+                            boardActions
+                          )
+                        }
                       >
-                        등록
-                      </Link>
+                        수정
+                      </button>
 
-                      <Link
+                      <button
                         style={{ height: "30px", marginLeft: "10px" }}
                         to="/Board"
+                        onClick={() => setIsModifyMode(false)}
                       >
                         취소
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 </div>

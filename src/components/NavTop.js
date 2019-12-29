@@ -47,7 +47,7 @@ const NavTop = () => {
                 padding: "10px 10px 10px 10px"
               }}
             >
-              게시판
+              일반 게시판
             </Link>
 
             <Link
