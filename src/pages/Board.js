@@ -92,8 +92,8 @@ const Board = ({ location }) => {
                                 (prevValue, currentObj) => {
                                   if (currentObj.postId == currentPost.id) {
                                     prevValue = prevValue + 1;
-                                    return prevValue;
                                   }
+                                  return prevValue;
                                 },
                                 0
                               )}

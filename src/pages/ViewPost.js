@@ -250,29 +250,42 @@ const ViewPost = ({ location }) => {
                   borderRadius: "5px"
                 }}
               >
-                <p>댓글 목록({boardState.commentList.length})</p>
-                {boardState.commentList.map(commentObj => {
-                  return (
-                    <div style={{ display: "flex", flexDirection: "row" }}>
-                      {" "}
-                      {showNickName(usersState, commentObj.userId)}
-                      <p> : </p>
-                      {commentObj.comment}
-                      {commentObj.userId === usersState.loginUserId && (
-                        <button
-                          onClick={() =>
-                            onHandleClickDeleteComment(
-                              commentObj.id,
-                              boardActions
-                            )
-                          }
-                        >
-                          삭제
-                        </button>
-                      )}
-                    </div>
-                  );
-                })}
+                <p>
+                  댓글 목록(
+                  {boardState.commentList.reduce((prevValue, currentObj) => {
+                    if (currentObj.postId == parseInt(query.id)) {
+                      prevValue = prevValue + 1;
+                    }
+                    return prevValue;
+                  }, 0)}
+                  )
+                </p>
+                {boardState.commentList
+                  .filter(commentObj => {
+                    return parseInt(query.id) === commentObj.id;
+                  })
+                  .map(commentObj => {
+                    return (
+                      <div style={{ display: "flex", flexDirection: "row" }}>
+                        {" "}
+                        {showNickName(usersState, commentObj.userId)}
+                        <p> : </p>
+                        {commentObj.comment}
+                        {commentObj.userId === usersState.loginUserId && (
+                          <button
+                            onClick={() =>
+                              onHandleClickDeleteComment(
+                                commentObj.id,
+                                boardActions
+                              )
+                            }
+                          >
+                            삭제
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
 
                 <input
                   placeholder="댓글 내용"
